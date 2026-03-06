@@ -56,12 +56,16 @@ void terminarViaje(const char *motivo)
   digitalWrite(PIN_LED_NODOS, LOW);
   ledcWrite(CANAL_PWM, 0);
   fIzq = fDer = fCen = fFreno = false;
-  Serial.println("\n========================================");
-  Serial.println("           FIN DEL VIAJE");
-  Serial.printf("  Motivo          : %s\n", motivo);
-  Serial.printf("  Nodos recorridos: %d\n", nodos);
+  Serial.println();
   Serial.println("========================================");
-  Serial.println("Presiona BTN INICIO para nuevo viaje.\n");
+  Serial.println("           FIN DEL VIAJE");
+  Serial.print("  Motivo          : ");
+  Serial.println(motivo);
+  Serial.print("  Nodos recorridos: ");
+  Serial.println(nodos);
+  Serial.println("========================================");
+  Serial.println("Presiona BTN INICIO para nuevo viaje.");
+  Serial.println();
 }
 
 void setup()
@@ -105,7 +109,8 @@ void setup()
   Serial.println("========================================");
   Serial.println("   SCOOTER GEN-5 - SISTEMA LISTO");
   Serial.println("   Presiona BTN INICIO para comenzar");
-  Serial.println("========================================\n");
+  Serial.println("========================================");
+  Serial.println();
 }
 
 void loop()
@@ -123,7 +128,8 @@ void loop()
       fIzq = fDer = fCen = fFreno = false;
       digitalWrite(PIN_LED_ESTADO, HIGH);
       digitalWrite(PIN_LED_NODOS, LOW);
-      Serial.println(">>> MOVIMIENTO INICIADO\n");
+      Serial.println(">>> MOVIMIENTO INICIADO");
+      Serial.println();
     }
     else
     {
@@ -146,7 +152,8 @@ void loop()
     digitalWrite(PIN_LED_NODOS, HIGH);
     delay(80);
     digitalWrite(PIN_LED_NODOS, LOW);
-    Serial.printf(">>> NODO ALCANZADO. Total: %d\n", nodos);
+    Serial.print(">>> NODO ALCANZADO. Total: ");
+    Serial.println(nodos);
   }
   estadoBtn2 = lecturaBtn2;
 
@@ -172,7 +179,9 @@ void loop()
   {
     if (!fCen)
     {
-      Serial.printf(">>> Objeto en el centro a %.0f cm\n", dCen);
+      Serial.print(">>> Objeto en el centro a ");
+      Serial.print((int)dCen);
+      Serial.println(" cm");
       fCen = true;
       fIzq = fDer = fFreno = false;
     }
@@ -187,7 +196,9 @@ void loop()
     angActual = (float)map((long)constrain((int)dIzq, 5, 200), 200L, 5L, 90L, 180L);
     if (!fIzq)
     {
-      Serial.printf(">>> Objeto se acerca por la izquierda a %.0f cm - voltear a la derecha\n", dIzq);
+      Serial.print(">>> Objeto se acerca por la izquierda a ");
+      Serial.print((int)dIzq);
+      Serial.println(" cm - voltear a la derecha");
       fIzq = true;
       fDer = fCen = fFreno = false;
     }
@@ -197,7 +208,9 @@ void loop()
     angActual = (float)map((long)constrain((int)dDer, 5, 200), 200L, 5L, 90L, 0L);
     if (!fDer)
     {
-      Serial.printf(">>> Objeto se acerca por la derecha a %.0f cm - girando a la izquierda\n", dDer);
+      Serial.print(">>> Objeto se acerca por la derecha a ");
+      Serial.print((int)dDer);
+      Serial.println(" cm - girando a la izquierda");
       fDer = true;
       fIzq = fCen = fFreno = false;
     }
