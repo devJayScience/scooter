@@ -133,9 +133,6 @@
  C:/Users/Jose/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_hw_support/include/soc/esp32/spiram.h \
  C:/Users/Jose/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/Jose/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- .pio/libdeps/esp32dev/ESP32Servo/src/ESP32Servo.h \
- .pio/libdeps/esp32dev/ESP32Servo/src/ESP32PWM.h \
- C:/Users/Jose/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-ledc.h \
  .pio/libdeps/esp32dev/Adafruit\ MPU6050/Adafruit_MPU6050.h \
  .pio/libdeps/esp32dev/Adafruit\ BusIO/Adafruit_BusIO_Register.h \
  .pio/libdeps/esp32dev/Adafruit\ BusIO/Adafruit_GenericDevice.h \

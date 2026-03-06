@@ -16,7 +16,6 @@
     { "type": "wokwi-hc-sr04",  "id": "ultrasonic1", "top": 155.1,  "left": -13.7,   "attrs": { "distance": "400" } },
     { "type": "wokwi-hc-sr04",  "id": "ultrasonic2", "top": 279.9,  "left": -253.7,  "attrs": { "distance": "400" } },
     { "type": "wokwi-hc-sr04",  "id": "ultrasonic3", "top": 251.1,  "left": 197.5,   "attrs": { "distance": "400" } },
-    { "type": "wokwi-servo",    "id": "servo1",      "top": 258.2,  "left": 385.8,   "rotate": 270, "attrs": {} },
     { "type": "wokwi-led",      "id": "led1",        "top": 466.8,  "left": 455,     "attrs": { "color": "cyan"  } },
     { "type": "wokwi-led",      "id": "led2",        "top": 520.0,  "left": 455,     "attrs": { "color": "green" } },
     { "type": "wokwi-led",      "id": "led3",        "top": 574.0,  "left": 455,     "attrs": { "color": "blue"  } },
@@ -42,10 +41,6 @@
   "connections": [
     ["esp:TX", "$serialMonitor:RX", "", []],
     ["esp:RX", "$serialMonitor:TX", "", []],
-
-    ["servo1:PWM", "esp:13",    "orange", []],
-    ["servo1:V+",  "esp:5V",    "red",    []],
-    ["servo1:GND", "esp:GND.1", "black",  []],
 
     ["ultrasonic2:VCC",  "esp:5V",    "red",   []],
     ["ultrasonic2:GND",  "esp:GND.1", "black", []],

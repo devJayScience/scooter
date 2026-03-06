@@ -1,10 +1,8 @@
 #include <Arduino.h>
-#include <ESP32Servo.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
-#define PIN_SERVO 13
 #define PIN_LED_ESTADO 4
 #define PIN_LED_NODOS 2
 #define PIN_LED_POTENCIA 33
@@ -24,12 +22,10 @@
 #define CANAL_PWM 0
 #define DEBOUNCE 300UL
 
-Servo servo;
 Adafruit_MPU6050 mpu;
 bool mpuOK = false;
 bool viajeActivo = false;
 int nodos = 0;
-float angActual = 90.0f;
 
 unsigned long tBtn1 = 0;
 unsigned long tBtn2 = 0;
@@ -56,8 +52,6 @@ float medir(int trig, int echo)
 void terminarViaje(const char *motivo)
 {
   viajeActivo = false;
-  servo.write(90);
-  angActual = 90.0f;
   digitalWrite(PIN_LED_ESTADO, LOW);
   digitalWrite(PIN_LED_NODOS, LOW);
   ledcWrite(CANAL_PWM, 0);
@@ -94,11 +88,6 @@ void setup()
   pinMode(TRIG_DER, OUTPUT);
   pinMode(ECHO_DER, INPUT);
 
-  servo.attach(PIN_SERVO, 544, 2400);
-  delay(500);
-  servo.write(90);
-  angActual = 90.0f;
-
   Wire.begin(PIN_SDA, PIN_SCL);
   if (mpu.begin())
   {
@@ -131,8 +120,6 @@ void loop()
     {
       viajeActivo = true;
       nodos = 0;
-      angActual = 90.0f;
-      servo.write(90);
       fIzq = fDer = fCen = fFreno = false;
       digitalWrite(PIN_LED_ESTADO, HIGH);
       digitalWrite(PIN_LED_NODOS, LOW);
@@ -179,11 +166,10 @@ void loop()
   float dCen = medir(TRIG_CEN, ECHO_CEN);
   float dDer = medir(TRIG_DER, ECHO_DER);
 
-  float objetivo = 90.0f;
+  float angActual = 90.0f;
 
   if (dCen < 200.0f)
   {
-    objetivo = 90.0f;
     if (!fCen)
     {
       Serial.printf(">>> Objeto en el centro a %.0f cm\n", dCen);
@@ -198,7 +184,7 @@ void loop()
   }
   else if (dIzq < 200.0f)
   {
-    objetivo = (float)map((long)constrain((int)dIzq, 5, 200), 200L, 5L, 90L, 180L);
+    angActual = (float)map((long)constrain((int)dIzq, 5, 200), 200L, 5L, 90L, 180L);
     if (!fIzq)
     {
       Serial.printf(">>> Objeto se acerca por la izquierda a %.0f cm - voltear a la derecha\n", dIzq);
@@ -208,7 +194,7 @@ void loop()
   }
   else if (dDer < 200.0f)
   {
-    objetivo = (float)map((long)constrain((int)dDer, 5, 200), 200L, 5L, 90L, 0L);
+    angActual = (float)map((long)constrain((int)dDer, 5, 200), 200L, 5L, 90L, 0L);
     if (!fDer)
     {
       Serial.printf(">>> Objeto se acerca por la derecha a %.0f cm - girando a la izquierda\n", dDer);
@@ -218,23 +204,12 @@ void loop()
   }
   else
   {
-    objetivo = 90.0f;
     if (fIzq || fDer || fCen)
     {
       Serial.println(">>> Objeto alejado - volviendo al centro");
       fIzq = fDer = fCen = fFreno = false;
     }
   }
-
-  float diff = objetivo - angActual;
-  if (abs(diff) > 0.5f)
-    angActual += diff * 0.15f;
-  else
-    angActual = objetivo;
-
-  // ✅ DEBUG: muestra el angulo que se esta enviando al servo
-  Serial.printf(">>> SERVO: objetivo=%d | actual=%d\n", (int)objetivo, (int)angActual);
-  servo.write((int)angActual);
 
   int potMax = map(analogRead(PIN_POT), 0, 4095, 0, 255);
   float desv = abs(angActual - 90.0f);
